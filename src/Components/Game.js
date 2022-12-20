@@ -2,7 +2,8 @@ import React from 'react'
 import {useState, useRef} from 'react'
 import {ContainerGame, 
         ContainerWord,
-        ContainerLetter} from '../Styled/Game.styled'
+        ContainerLetter,
+        ContainerInfo} from '../Styled/Game.styled'
         
 
 const Game = ({
@@ -31,6 +32,7 @@ const Game = ({
 
     return (
   <ContainerGame>
+    <ContainerInfo>
       <p>
         <span>pontuação: {score}</span>
       </p>   
@@ -39,6 +41,7 @@ const Game = ({
         Dica sobre a palavra <span> : {pickedCategory}</span>
       </h3>
         <p>Você ainda tem {guesses} tentativa(s).</p>
+    </ContainerInfo>
       <ContainerWord>
         {letters.map((letter, i) =>
         guessedLetters.includes(letter) ?(

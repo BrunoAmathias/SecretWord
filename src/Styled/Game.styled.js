@@ -4,16 +4,23 @@ export const ContainerGame = styled.div `
     display: flex;
     align-items: center;
     flex-direction: column;
-
     h1{
         font-size: 2.5em;
 }
 `
+export const ContainerInfo = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 20px;
 
+`
 export const ContainerWord = styled.div`
     margin: 1.5em;
     padding: 1.5em;
-    border: 20px solid #ecfa00;
+    border: 17px solid #ecfa00;
+    box-shadow: 3px 3px 30px white;
+    border-radius: 10px;
     display: flex;
 
     span{

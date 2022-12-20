@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ContainerApp } from './Styled/App.styled';
-import {useState} from 'react'
 import {listWord} from './data/word'
 import StartScreen from './Components/StartScreen';
 import Game from './Components/Game'
@@ -27,26 +26,36 @@ function App() {
   const [wrongLetters, setWrongLetters] = useState([])
   const [guesses, setGuesses ] = useState(3)
   const [score, setScore] = useState(0)
+  const [usedWords, setUsedWords] = useState([])
 
 
-  const pickWordAndCategory = () =>{
+  const pickWordAndCategory = useCallback(() =>{
     const categories = Object.keys(words)
     const category = categories[Math.floor(Math.random() * Object.keys(categories).length)]
-    console.log(category);
     const word = words[category][Math.floor(Math.random() * words[category].length)]
-    console.log(word);
 
     return {word, category}
-  }
+  },[words])
 
-  const startGame = () =>{
+  const startGame = useCallback(() =>{
+    clearLetterStates()
+
+
     const {word, category} = pickWordAndCategory()
+
+    if(usedWords.includes(word)){
+      setGameStage(stages[2].name)
+      return
+    }
+
+    console.log(word);
+
+    usedWords.push(word)
+    console.log(usedWords);
+
 
     let wordLetters = word.split('')
     wordLetters = wordLetters.map(i => i.toLowerCase())
-
-    console.log(word, category);
-    console.log(wordLetters);
 
     setPickedWord(word)
     setPickedCategory(category)
@@ -54,7 +63,7 @@ function App() {
 
 
     setGameStage(stages[1].name)
-  }
+  },[pickWordAndCategory])
 
   const verifyLetter = (letter) =>{
 
@@ -95,12 +104,25 @@ useEffect(()=>{
   }
 },[guesses])
 
+useEffect(()=>{
+
+  const uniqueLetters = [...new Set(letters)]
+
+  if(guessedLetters.length === uniqueLetters.length && gameStage === stages[1].name){
+
+    setScore(score + 100)
+    startGame()
+    setGuesses(3)
+  }
+
+},[guessedLetters, letters, gameStage, startGame])
+
   const retry = () =>{
+    setUsedWords([])
     setScore(0)
     setGuesses(3)
     setGameStage(stages[0].name)
   }
-
   return (
     <ContainerApp>
       {gameStage ==='start' && <StartScreen startGame={startGame} />}
